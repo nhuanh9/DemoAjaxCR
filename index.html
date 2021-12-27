@@ -1,0 +1,27 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+</head>
+<body>
+<script>
+    // Viết hàm sumInput() rằng:
+    //
+    //     Yêu cầu người dùng nhập các giá trị bằng cách sử dụng prompt và lưu trữ các giá trị trong mảng.
+    //     Kết thúc yêu cầu khi người dùng nhập một giá trị không phải số, một chuỗi trống hoặc nhấn “Hủy”.
+    // Tính toán và trả về tổng của các mục mảng.
+    function sumInput() {
+        let sum = 0;
+        let input = prompt("Nhập vào nhé bro :))");
+        while (input !== null && isNaN(input) !== true && input !== "") {
+            sum += +input;
+            input = prompt("Nhập vào nhé bro :))");
+        }
+        alert(sum)
+    }
+
+    sumInput();
+</script>
+</body>
+</html>
