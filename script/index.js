@@ -15,7 +15,7 @@ function loadListProduct() {
             console.log(nal);
             let html = `<div class="row p-3">`;
             for (let i = 0; i < nal.length; i++) {
-                html += '<div class="col-4 product p-3"><h3>' + nal[i].name + '</h3></div>'
+                html += '<div class="col-4 product p-3"><h3 onclick="showOne()">' + nal[i].name + '</h3></div>'
             }
             html += `</div>`;
             document.getElementById('list-product').innerHTML = html;
@@ -37,4 +37,9 @@ function loadListClass() {
             document.getElementById('categories').innerHTML = html;
         }
     })
+}
+
+function showOne() {
+    let html = `<div class="col-12 p-3"><h1>Đang show one nhé!</h1></div>`;
+    document.getElementById('content').innerHTML = html;
 }

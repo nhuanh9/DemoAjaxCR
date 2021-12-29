@@ -19,7 +19,7 @@
         function displayName(array) {
             let res = ""
             for (let i = 0; i < array.length; i++) {
-                res += array[i].name + "<button onclick='showEditForm(" + array[i].id + ")'>Edit</button><br>";
+                res += array[i].name + "<h4 onclick='showEditForm(" + array[i].id + ")'>Edit</h4><br>";
             }
             document.getElementById("display").innerHTML = res;
         }
@@ -95,7 +95,6 @@
 <button onclick="getAllStudent()">Hiển thị danh sách học sinh</button>
 <button onclick="showFormAdd()">Thêm mới</button>
 <div id="display">
-
 </div>
 </body>
 </html>
