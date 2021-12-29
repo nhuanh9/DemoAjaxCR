@@ -40,6 +40,9 @@ function loadListClass() {
 }
 
 function showOne() {
-    let html = `<div class="col-12 p-3"><h1>Đang show one nhé!</h1></div>`;
+    let html = `<div class="col-12 p-3">
+                    <h1>Đang show one nhé!</h1>
+                    <a onclick="loadHomeContent()">Quay về</a>
+                </div>`;
     document.getElementById('content').innerHTML = html;
 }
