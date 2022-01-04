@@ -1,0 +1,89 @@
+<!DOCTYPE html>
+<head>
+    <title>Upload Files</title>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+    <script type="text/javascript">
+        $(document).ready(function() {
+
+            $("#submitButton").click(function(event) {
+                event.preventDefault();
+                ajaxSubmitForm();
+            });
+
+        });
+
+        function ajaxSubmitForm() {
+            var form = $('#fileUploadForm')[0];
+            console.log(form)
+            var data = new FormData(form);
+            $("#submitButton").prop("disabled", true);
+            $.ajax({
+                type: "POST",
+                enctype: 'multipart/form-data',
+                url: "http://localhost:8080/api/students/upload",
+                data: data,
+                processData: false,
+                contentType: false,
+                cache: false,
+                timeout: 1000000,
+                success: function(data, textStatus, jqXHR) {
+
+                    $("#result").html(data);
+                    console.log("SUCCESS : ", data);
+                    $("#submitButton").prop("disabled", false);
+                    $('#fileUploadForm')[0].reset();
+                },
+                error: function(jqXHR, textStatus, errorThrown) {
+                    $("#result").html(jqXHR.responseText);
+                    console.log("ERROR : ", jqXHR.responseText);
+                    $("#submitButton").prop("disabled", false);
+
+                }
+            });
+
+        }
+        function submitForm() {
+            let form = document.getElementById("form");
+            let data = new FormData(form);
+            $.ajax({
+                type: "POST",
+                enctype: 'multipart/form-data',
+                url: "http://localhost:8080/api/students/upload",
+                data: data,
+                processData: false,
+                contentType: false,
+                cache: false,
+                timeout: 1000000,
+                success: function (data) {
+                    document.getElementById('main').innerHTML = `${data.name}<img src="image/${data.name}">`
+                }
+            })
+        }
+    </script>
+</head>
+<body>
+<!--<img src="image/220583848_1236627630168268_8470542190590965612_n.jpeg" height="1082" width="1440"/>-->
+<!--<h1>Spring Boot File Upload with jQuery Ajax</h1>-->
+<!--<form method="POST" enctype="multipart/form-data" id="fileUploadForm">-->
+<!--    Description: <br/>-->
+<!--    <input type="text" name="description" style="width:350px;"/>-->
+<!--    <br/><br/>-->
+<!--    File to upload (1): <input type="file" name="files"/><br />-->
+<!--    File to upload (2): <input type="file" name="files"/><br />-->
+<!--    File to upload (3): <input type="file" name="files"/><br />-->
+<!--    File to upload (4): <input type="file" name="files"/><br />-->
+<!--    File to upload (5): <input type="file" name="files"/><br />-->
+<!--    <input type="submit" value="Submit" id="submitButton"/>-->
+<!--</form>-->
+<!--<h2>Upload Results:</h2>-->
+<!--<div style="border:1px solid #ccc;padding: 5px;">-->
+<!--    <span id="result"></span>-->
+<!--</div>-->
+<div id="main"></div>
+<form enctype="multipart/form-data" id="form">
+    <input type="text" name="name">
+    <input type="file" name="file"/>
+    <button type="button" onclick="submitForm()">Upload</button>
+</form>
+</body>
+</html>

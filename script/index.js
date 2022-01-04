@@ -19,6 +19,8 @@ function loadListProduct() {
             }
             html += `</div>`;
             document.getElementById('list-product').innerHTML = html;
+        }, error: function (error) {
+            console.log(error);
         }
     })
 }
