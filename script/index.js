@@ -144,6 +144,7 @@ function save(id) {
 }
 
 function showAddForm() {
+
     let html = "<div class='offset-3 col-6 mb-3'><h2 style=\"text-align: center\">Thêm mới học sinh</h2>" +
         "<div>\n" +
         "  <div class=\"form-group row\">\n" +
@@ -155,23 +156,43 @@ function showAddForm() {
         "  <div class=\"form-group row\">\n" +
         "    <label for=\"age\" class=\"col-sm-4 col-form-label\">Tuổi</label>\n" +
         "    <div class=\"col-sm-8\">\n" +
-        "      <input type=\"text\" class=\"form-control\" id=\"age\">\n" +
+        "      <input type=\"number\" class=\"form-control\" id=\"age\">\n" +
         "    </div>\n" +
         "  </div>\n" +
         "  <div class=\"form-group row\">\n" +
         "    <label for=\"score\" class=\"col-sm-4 col-form-label\">Điểm</label>\n" +
         "    <div class=\"col-sm-8\">\n" +
-        "      <input type=\"text\" class=\"form-control\" id=\"score\">\n" +
+        "      <input type=\"number\" class=\"form-control\" id=\"score\">\n" +
         "    </div>\n" +
         "  </div>\n" +
         "  <div class=\"row\">\n" +
+        "    <label for=\"clazz\" class=\"col-sm-4 col-form-label\">Lớp</label>\n" +
+        "    <div class=\"col-sm-8\">\n" +
+        "      <select class=\"form-control\" id='clazz'>\n" +
+        "      </select>" +
+        "    </div>\n" +
+        "  </div>\n" +
+        "  <div class=\"row mt-2\">\n" +
         "    <div class=\"offset-5 col-sm-2\">\n" +
         "       <button class=\"btn btn-outline-primary\" onclick=\"add()\">Thêm</button>" +
         "    </div>\n" +
         "  </div>\n" +
         "</div>" +
         "</div>"
-    content.innerHTML = html
+    content.innerHTML = html;
+    $.ajax({
+        type: "GET",
+        url: "http://localhost:8080/api/classes",
+        success: function (nal) {
+            let html = ``;
+            for (let i = 0; i < nal.length; i++) {
+                html += `<option value="${nal[i].id}"> ${nal[i].name}</option>`
+            }
+            html += ``;
+            document.getElementById('clazz').innerHTML = html;
+        }
+    })
+
 }
 
 function add() {
@@ -181,15 +202,16 @@ function add() {
     let name = inpName.value;
     let score = inpScore.value;
     let age = inpAge.value;
-    // let clazz = document.getElementById("clazz").value;
+    let clazz = document.getElementById("clazz").value;
     let nal = {
         name: name,
         score: score,
         age: age,
         clazz: {
-            id: 1
+            id: clazz
         }
     }
+    console.log(clazz)
     $.ajax({
         headers: {
             'Accept': 'application/json',
