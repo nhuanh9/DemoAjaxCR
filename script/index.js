@@ -15,6 +15,7 @@ function loadHomeContent() {
                 <tr>
                   <th scope="col">#</th>
                   <th scope="col">Tên</th>
+                  <th scope="col">Lớp</th>
                   <th scope="col">Tuổi</th>
                   <th scope="col">Điểm</th>
                   <th scope="col">Hành động</th>
@@ -40,9 +41,10 @@ function loadListStudent() {
             for (let i = 0; i < nal.length; i++) {
                 html1 += `<tr><th scope="row">${i}</th>
                           <td>${nal[i].name}</td>
+                          <td>${nal[i].clazz.name}</td>
                           <td>${nal[i].age}</td>
                           <td>${nal[i].score}</td>
-                          <td><button class="btn btn-outline-secondary mr-2" onclick="showEdit(${nal[i].id})">Sửa</button><Button class="btn btn-outline-danger">Xoá</Button></td></tr>`
+                          <td><button class="btn btn-outline-secondary mr-2" onclick="showEdit(${nal[i].id})">Sửa</button><Button class="btn btn-outline-danger" onclick="del(${nal[i].id},'${nal[i].name}')">Xoá</Button></td></tr>`
             }
             document.getElementById('list-product').innerHTML = html1;
         }, error: function (error) {
@@ -79,35 +81,50 @@ function showEdit(id) {
         type: "GET",
         url: "http://localhost:8080/api/students/" + id,
         success: function (nal) {
-            let html = "<div class='offset-3 col-6 mb-3'><h2 style=\"text-align: center\">Cập nhật thông tin</h2>" +
-                "<div>\n" +
-                "  <div class=\"form-group row\">\n" +
-                "    <label for=\"name\" class=\"col-sm-4 col-form-label\">Họ và tên</label>\n" +
-                "    <div class=\"col-sm-8\">\n" +
-                "      <input type=\"text\" class=\"form-control\" id=\"name\" value='" + nal.name + "'>\n" +
-                "    </div>\n" +
-                "  </div>\n" +
-                "  <div class=\"form-group row\">\n" +
-                "    <label for=\"age\" class=\"col-sm-4 col-form-label\">Tuổi</label>\n" +
-                "    <div class=\"col-sm-8\">\n" +
-                "      <input type=\"text\" class=\"form-control\" id=\"age\" value='" + nal.age + "'>\n" +
-                "    </div>\n" +
-                "  </div>\n" +
-                "  <div class=\"form-group row\">\n" +
-                "    <label for=\"score\" class=\"col-sm-4 col-form-label\">Điểm</label>\n" +
-                "    <div class=\"col-sm-8\">\n" +
-                "      <input type=\"text\" class=\"form-control\" id=\"score\" value='" + nal.score + "'>\n" +
-                "    </div>\n" +
-                "  </div>\n" +
-                "  <div class=\"row\">\n" +
-                "    <div class=\"offset-5 col-sm-2\">\n" +
-                "       <button class=\"btn btn-outline-primary\" onclick=\"save(" + nal.id + ")\">Sửa</button>" +
-                "    </div>\n" +
-                "  </div>\n" +
-                "</div>" +
-                "</div>"
-            content.innerHTML = html
-
+            $.ajax({
+                type: "GET",
+                url: "http://localhost:8080/api/classes",
+                success: function (data) {
+                    let html = "<div class='offset-3 col-6 mb-3'><h2 style=\"text-align: center\">Cập nhật thông tin</h2>" +
+                        "<div>\n" +
+                        "  <div class=\"form-group row\">\n" +
+                        "    <label for=\"name\" class=\"col-sm-4 col-form-label\">Họ và tên</label>\n" +
+                        "    <div class=\"col-sm-8\">\n" +
+                        "      <input type=\"text\" class=\"form-control\" id=\"name\" value='" + nal.name + "'>\n" +
+                        "    </div>\n" +
+                        "  </div>\n" +
+                        "  <div class=\"form-group row\">\n" +
+                        "    <label for=\"age\" class=\"col-sm-4 col-form-label\">Tuổi</label>\n" +
+                        "    <div class=\"col-sm-8\">\n" +
+                        "      <input type=\"number\" class=\"form-control\" id=\"age\" value='" + nal.age + "'>\n" +
+                        "    </div>\n" +
+                        "  </div>\n" +
+                        "  <div class=\"form-group row\">\n" +
+                        "    <label for=\"score\" class=\"col-sm-4 col-form-label\">Điểm</label>\n" +
+                        "    <div class=\"col-sm-8\">\n" +
+                        "      <input type=\"number\" class=\"form-control\" id=\"score\" value='" + nal.score + "'>\n" +
+                        "    </div>\n" +
+                        "  </div>\n" +
+                        "  <div class=\"row\">\n" +
+                        "    <label for=\"clazz\" class=\"col-sm-4 col-form-label\">Lớp</label>\n" +
+                        "    <div class=\"col-sm-8\">\n" +
+                        "      <select class=\"form-control\" id='clazz'>\n"
+                    for (let i = 0; i < data.length; i++) {
+                        html += `<option value="${data[i].id}"> ${data[i].name}</option>`
+                    }
+                    html += "      </select>" +
+                        "    </div>\n" +
+                        "  </div>\n" +
+                        "  <div class=\"row\">\n" +
+                        "    <div class=\"offset-5 col-sm-2\">\n" +
+                        "       <button class=\"btn btn-outline-primary mt-2\" onclick=\"save(" + nal.id + ")\">Sửa</button>" +
+                        "    </div>\n" +
+                        "  </div>\n" +
+                        "</div>" +
+                        "</div>"
+                    content.innerHTML = html
+                }
+            })
         }
     })
 }
@@ -119,13 +136,13 @@ function save(id) {
     let name = inpName.value;
     let score = inpScore.value;
     let age = inpAge.value;
-    // let clazz = document.getElementById("clazz").value;
+    let clazz = document.getElementById("clazz").value;
     let nal = {
         name: name,
         score: score,
         age: age,
         clazz: {
-            id: 1
+            id: clazz
         }
     }
     $.ajax({
@@ -211,7 +228,6 @@ function add() {
             id: clazz
         }
     }
-    console.log(clazz)
     $.ajax({
         headers: {
             'Accept': 'application/json',
@@ -225,4 +241,21 @@ function add() {
             console.log(error)
         }
     })
+}
+
+function del(id, name) {
+    if (confirm("Bạn có chắc chắn muốn xoá học sinh " + name + "???")) {
+        $.ajax({
+            headers: {
+                'Accept': 'application/json',
+                'Content-Type': 'application/json',
+            },
+            type: 'Delete',
+            url: 'http://localhost:8080/api/students/' + id,
+            success: loadHomeContent,
+            error: function (error) {
+                console.log(error)
+            }
+        })
+    }
 }
