@@ -31,8 +31,9 @@ function loadHomeContent() {
 function loadListProduct() {
     $.ajax({
         type: "GET",
-        url: API + "/products",
+        url: API + "/products?size=50",
         success: function (data) {
+            console.log(data.content)
             let html1 = "";
             for (let i = 0; i < data.content.length; i++) {
                 if (data.content[i].state == true) {
@@ -90,60 +91,60 @@ function showEdit(id) {
                 "  <div class=\"form-group row mt-4\">\n" +
                 "    <label for=\"name\" class=\"col-sm-4 col-form-label\">Name</label>\n" +
                 "    <div class=\"col-sm-8\">\n" +
-                "      <input type=\"text\" class=\"form-control\" id=\"name\" value='" + data.name + "'>\n" +
+                "      <input type=\"text\" class=\"form-control\" name=\"name\" value='" + data.name + "'>\n" +
                 "    </div>\n" +
                 "  </div>\n" +
                 "  <div class=\"form-group row\">\n" +
                 "    <label for=\"age\" class=\"col-sm-4 col-form-label\">Price</label>\n" +
                 "    <div class=\"col-sm-8\">\n" +
-                "      <input type=\"text\" class=\"form-control\" id=\"price\" value='" + data.price + "'>\n" +
+                "      <input type=\"text\" class=\"form-control\" name=\"price\" value='" + data.price + "'>\n" +
                 "    </div>\n" +
                 "  </div>\n" +
                 "  <div class=\"form-group row\">\n" +
                 "    <label for=\"score\" class=\"col-sm-4 col-form-label\">Competitive</label>\n" +
                 "    <div class=\"col-sm-8\">\n" +
-                "      <input type=\"text\" class=\"form-control\" id=\"competitive\" value='" + data.competitive + "'>\n" +
+                "      <input type=\"text\" class=\"form-control\" name=\"competitive\" value='" + data.competitive + "'>\n" +
                 "    </div>\n" +
                 "  </div>\n" +
                 "  <div class=\"form-group row\">\n" +
                 "    <label for=\"score\" class=\"col-sm-4 col-form-label\">Short Description</label>\n" +
                 "    <div class=\"col-sm-8\">\n" +
-                "      <input type=\"text\" class=\"form-control\" id=\"shortDescription\" value='" + data.shortDescription + "'>\n" +
+                "      <input type=\"text\" class=\"form-control\" name=\"shortDescription\" value='" + data.shortDescription + "'>\n" +
                 "    </div>\n" +
                 "  </div>\n" +
                 "  <div class=\"form-group row\">\n" +
                 "    <label for=\"score\" class=\"col-sm-4 col-form-label\">Description</label>\n" +
                 "    <div class=\"col-sm-8\">\n" +
-                "      <input type=\"text\" class=\"form-control\" id=\"description\" value='" + data.description + "'>\n" +
+                "      <input type=\"text\" class=\"form-control\" name=\"description\" value='" + data.description + "'>\n" +
                 "    </div>\n" +
                 "  </div>\n" +
                 "  <div class=\"form-group row\">\n" +
                 "    <label for=\"score\" class=\"col-sm-4 col-form-label\">Brand Name</label>\n" +
                 "    <div class=\"col-sm-8\">\n" +
-                "      <input type=\"text\" class=\"form-control\" id=\"brandName\" value='" + data.brandName + "'>\n" +
+                "      <input type=\"text\" class=\"form-control\" value='" + data.brandName + "'>\n" +
                 "    </div>\n" +
                 "  </div>\n" +
                 "  <div class=\"form-group row\">\n" +
                 "    <label for=\"score\" class=\"col-sm-4 col-form-label\">Category Name</label>\n" +
                 "    <div class=\"col-sm-8\">\n" +
-                "      <input type=\"text\" class=\"form-control\" id=\"categoryName\" value='" + data.categoryName + "'>\n" +
+                "      <input type=\"text\" class=\"form-control\" value='" + data.categoryName + "'>\n" +
                 "    </div>\n" +
                 "  </div>\n" +
                 "  <div class=\"form-group row\">\n" +
                 "    <label for=\"score\" class=\"col-sm-4 col-form-label\">Colors</label>\n" +
                 "    <div class=\"col-sm-8\">\n" +
-                "      <input type=\"text\" class=\"form-control\" id=\"colors\" value='" + data.colors.join(', ') + "'>\n" +
+                "      <input type=\"text\" class=\"form-control\" value='" + data.colors.join(', ') + "'>\n" +
                 "    </div>\n" +
                 "  </div>\n" +
                 "  <div class=\"form-group row\">\n" +
                 "    <label for=\"score\" class=\"col-sm-4 col-form-label\">Size</label>\n" +
                 "    <div class=\"col-sm-8\">\n" +
-                "      <input type=\"text\" class=\"form-control\" id=\"sizes\" value='" + data.sizes.join(', ') + "'>\n" +
+                "      <input type=\"text\" class=\"form-control\" value='" + data.sizes.join(', ') + "'>\n" +
                 "    </div>\n" +
                 "  </div>\n" +
                 "  <div class=\"row\">\n" +
                 "    <div class=\"offset-5 col-sm-2\">\n" +
-                "       <button class=\"btn btn-outline-primary mt-2\" type='button' onclick=\"save('" + data.code + "')\">Sửa</button>" +
+                "       <button class=\"btn btn-outline-primary mt-2\" type='button' onclick=\"save(" + data.id + ", '"+data.code+"')\">Change</button>" +
                 "    </div>\n" +
                 "  </div>\n" +
                 "</form>" +
@@ -153,73 +154,75 @@ function showEdit(id) {
     })
 }
 
-function save(id) {
-    console.log(document.getElementById('product'));
-    // let inpName = document.getElementById('name');
-    // let inpAge = document.getElementById('age');
-    // let inpScore = document.getElementById('score');
-    // let name = inpName.value;
-    // let score = inpScore.value;
-    // let age = inpAge.value;
-    // let clazz = document.getElementById("clazz").value;
-    // let data = {
-    //     name: name,
-    //     score: score,
-    //     age: age,
-    //     clazz: {
-    //         id: clazz
-    //     }
-    // }
-    // $.ajax({
-    //     headers: {
-    //         'Accept': 'application/json',
-    //         'Content-Type': 'application/json',
-    //     },
-    //     type: 'PUT',
-    //     url: 'http://localhost:8080/api/students/' + id,
-    //     data: JSON.stringify(data),
-    //     success: loadHomeContent,
-    //     error: function (error) {
-    //         console.log(error)
-    //     }
-    // })
+function save(id, code) {
+
+    let formData = new FormData(document.getElementById('product'));
+    formData.append('brand', '1');
+    formData.append('category', '1');
+    formData.append('colors', [1, 2]);
+    formData.append('sizes', [3, 4]);
+    formData.append('image', '1');
+    formData.append('state', 'true');
+    formData.append('id', id);
+    formData.append('code', code);
+    $.ajax({
+        type: 'PUT',
+        url: API + '/products',
+        data: formData,
+        cache: false,
+        processData: false,
+        contentType: 'form-data',
+        mimeType: 'form-data',
+        success: loadHomeContent,
+        error: function (error) {
+            console.log(error)
+            for (var pair of formData.entries()) {
+                console.log(pair[0] + ', ' + pair[1]);
+            }
+        }
+    })
 }
 
 function showAddForm() {
 
-    let html = "<div class='offset-3 col-6 mb-3'><h2 style=\"text-align: center\">Thêm mới học sinh</h2>" +
-        "<div>\n" +
-        "  <div class=\"form-group row\">\n" +
-        "    <label for=\"name\" class=\"col-sm-4 col-form-label\">Họ và tên</label>\n" +
+    let html = "<div class='offset-3 col-6 mb-3'><h2 style=\"text-align: center\">Add new product</h2>" +
+        "<form id='product'>" +
+        "  <div class=\"form-group row mt-4\">\n" +
+        "    <label for=\"name\" class=\"col-sm-4 col-form-label\">Name</label>\n" +
         "    <div class=\"col-sm-8\">\n" +
-        "      <input type=\"text\" class=\"form-control\" id=\"name\">\n" +
+        "      <input type=\"text\" class=\"form-control\" name=\"name\">\n" +
         "    </div>\n" +
         "  </div>\n" +
         "  <div class=\"form-group row\">\n" +
-        "    <label for=\"age\" class=\"col-sm-4 col-form-label\">Tuổi</label>\n" +
+        "    <label for=\"age\" class=\"col-sm-4 col-form-label\">Price</label>\n" +
         "    <div class=\"col-sm-8\">\n" +
-        "      <input type=\"number\" class=\"form-control\" id=\"age\">\n" +
+        "      <input type=\"text\" class=\"form-control\" name=\"price\">\n" +
         "    </div>\n" +
         "  </div>\n" +
         "  <div class=\"form-group row\">\n" +
-        "    <label for=\"score\" class=\"col-sm-4 col-form-label\">Điểm</label>\n" +
+        "    <label for=\"score\" class=\"col-sm-4 col-form-label\">Competitive</label>\n" +
         "    <div class=\"col-sm-8\">\n" +
-        "      <input type=\"number\" class=\"form-control\" id=\"score\">\n" +
+        "      <input type=\"text\" class=\"form-control\" name=\"competitive\">\n" +
+        "    </div>\n" +
+        "  </div>\n" +
+        "  <div class=\"form-group row\">\n" +
+        "    <label for=\"score\" class=\"col-sm-4 col-form-label\">Short Description</label>\n" +
+        "    <div class=\"col-sm-8\">\n" +
+        "      <input type=\"text\" class=\"form-control\" name=\"shortDescription\">\n" +
+        "    </div>\n" +
+        "  </div>\n" +
+        "  <div class=\"form-group row\">\n" +
+        "    <label for=\"score\" class=\"col-sm-4 col-form-label\">Description</label>\n" +
+        "    <div class=\"col-sm-8\">\n" +
+        "      <input type=\"text\" class=\"form-control\" name=\"description\">\n" +
         "    </div>\n" +
         "  </div>\n" +
         "  <div class=\"row\">\n" +
-        "    <label for=\"clazz\" class=\"col-sm-4 col-form-label\">Lớp</label>\n" +
-        "    <div class=\"col-sm-8\">\n" +
-        "      <select class=\"form-control\" id='clazz'>\n" +
-        "      </select>" +
+        "    <div class=\"offset-6 col-sm-2\">\n" +
+        "       <button class=\"btn btn-outline-primary mt-2\" type='button' onclick=\"add()\">Add</button>" +
         "    </div>\n" +
         "  </div>\n" +
-        "  <div class=\"row mt-2\">\n" +
-        "    <div class=\"offset-5 col-sm-2\">\n" +
-        "       <button class=\"btn btn-outline-primary\" onclick=\"add()\">Thêm</button>" +
-        "    </div>\n" +
-        "  </div>\n" +
-        "</div>" +
+        "</form>" +
         "</div>"
     content.innerHTML = html;
     $.ajax({
@@ -238,32 +241,25 @@ function showAddForm() {
 }
 
 function add() {
-    let inpName = document.getElementById('name');
-    let inpAge = document.getElementById('age');
-    let inpScore = document.getElementById('score');
-    let name = inpName.value;
-    let score = inpScore.value;
-    let age = inpAge.value;
-    let clazz = document.getElementById("clazz").value;
-    let data = {
-        name: name,
-        score: score,
-        age: age,
-        clazz: {
-            id: clazz
-        }
-    }
+    let formData = new FormData(document.getElementById('product'));
+    formData.append('brand', '1');
+    formData.append('category', '1');
+    formData.append('colors', [1, 2]);
+    formData.append('sizes', [3, 4]);
+    formData.append('image', '1');
     $.ajax({
-        headers: {
-            'Accept': 'application/json',
-            'Content-Type': 'application/json',
-        },
         type: 'POST',
-        url: 'http://localhost:8080/api/students',
-        data: JSON.stringify(data),
+        url: API + '/products',
+        data: formData,
+        contentType: 'form-data',
+        mimeType: 'form-data',
+        processData: false,
         success: loadHomeContent,
         error: function (error) {
             console.log(error)
+            for (var pair of formData.entries()) {
+                console.log(pair[0] + ', ' + pair[1]);
+            }
         }
     })
 }
@@ -276,7 +272,7 @@ function del(id, name) {
                 'Content-Type': 'application/json',
             },
             type: 'Delete',
-            url: API+'/products/' + id,
+            url: API + '/products/' + id,
             success: loadHomeContent,
             error: function (error) {
                 console.log(error)
