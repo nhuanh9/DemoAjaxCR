@@ -55,22 +55,6 @@ function loadListProduct() {
         }
     })
 }
-
-function loadListClass() {
-    $.ajax({
-        type: "GET",
-        url: "http://localhost:8080/api/classes",
-        success: function (data) {
-            let html = `<div class="row p-3"><h2>Danh sách lớp</h2>`;
-            for (let i = 0; i < data.length; i++) {
-                html += '<div class="col-12"><h5>' + data[i].name + '</h5></div>'
-            }
-            html += `</div>`;
-            document.getElementById('categories').innerHTML = html;
-        }
-    })
-}
-
 function showOne() {
     let html = `<div class="col-12 p-3">
                     <h1>Đang show one nhé!</h1>
@@ -279,27 +263,4 @@ function del(id, name) {
             }
         })
     }
-}
-
-function findByScore() {
-    let from = document.getElementById('from').value;
-    let to = document.getElementById('to').value;
-    $.ajax({
-        type: "GET",
-        url: "http://localhost:8080/api/students/score-between?from=" + from + "&to=" + to,
-        success: function (data) {
-            let html1 = "";
-            for (let i = 0; i < data.length; i++) {
-                html1 += `<tr><th scope="row">${i}</th>
-                          <td>${data[i].name}</td>
-                          <td>${data[i].clazz.name}</td>
-                          <td>${data[i].age}</td>
-                          <td>${data[i].score}</td>
-                          <td><button class="btn btn-outline-secondary mr-2" onclick="showEdit(${data[i].id})">Sửa</button><Button class="btn btn-outline-danger" onclick="del(${data[i].id},'${data[i].name}')">Xoá</Button></td></tr>`
-            }
-            document.getElementById('list-product').innerHTML = html1;
-        }, error: function (error) {
-            console.log(error);
-        }
-    })
 }
