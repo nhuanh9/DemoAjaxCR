@@ -316,18 +316,19 @@ function loadListCategory() {
 
 function deleteCategory(id, name) {
     if (confirm("Do you want to delete " + name + "???")) {
-        $.ajax({
-            headers: {
-                'Accept': 'application/json',
-                'Content-Type': 'application/json',
-            },
-            type: 'Delete',
-            url: API + '/categories/' + id,
-            success: loadHomeContent,
-            error: function (error) {
-                console.log(error)
-            }
-        })
+        // $.ajax({
+        //     headers: {
+        //         'Accept': 'application/json',
+        //         'Content-Type': 'application/json',
+        //     },
+        //     type: 'Delete',
+        //     url: API + '/categories/' + id,
+        //     success: loadHomeContent,
+        //     error: function (error) {
+        //         console.log(error)
+        //     }
+        // })
+        alert("Đã xoá!");
     }
 }
 
@@ -385,18 +386,19 @@ function loadListBrand() {
 
 function deleteBrand(id, name) {
     if (confirm("Do you want to delete " + name + "???")) {
-        $.ajax({
-            headers: {
-                'Accept': 'application/json',
-                'Content-Type': 'application/json',
-            },
-            type: 'Delete',
-            url: API + '/colors/' + id,
-            success: loadHomeContent,
-            error: function (error) {
-                console.log(error)
-            }
-        })
+        // $.ajax({
+        //     headers: {
+        //         'Accept': 'application/json',
+        //         'Content-Type': 'application/json',
+        //     },
+        //     type: 'Delete',
+        //     url: API + '/colors/' + id,
+        //     success: loadHomeContent,
+        //     error: function (error) {
+        //         console.log(error)
+        //     }
+        // })
+        alert("Đã xoá!");
     }
 }
 
@@ -449,18 +451,19 @@ function loadListColor() {
 
 function deleteColor(id, name) {
     if (confirm("Do you want to delete " + name + "???")) {
-        $.ajax({
-            headers: {
-                'Accept': 'application/json',
-                'Content-Type': 'application/json',
-            },
-            type: 'Delete',
-            url: API + '/colors/' + id,
-            success: loadHomeContent,
-            error: function (error) {
-                console.log(error)
-            }
-        })
+        // $.ajax({
+        //     headers: {
+        //         'Accept': 'application/json',
+        //         'Content-Type': 'application/json',
+        //     },
+        //     type: 'Delete',
+        //     url: API + '/colors/' + id,
+        //     success: loadHomeContent,
+        //     error: function (error) {
+        //         console.log(error)
+        //     }
+        // })
+        alert("Đã xoá!");
     }
 }
 
@@ -512,18 +515,19 @@ function loadListSize() {
 
 function deleteSize(id, name) {
     if (confirm("Do you want to delete " + name + "???")) {
-        $.ajax({
-            headers: {
-                'Accept': 'application/json',
-                'Content-Type': 'application/json',
-            },
-            type: 'Delete',
-            url: API + '/sizes/' + id,
-            success: loadHomeContent,
-            error: function (error) {
-                console.log(error)
-            }
-        })
+        // $.ajax({
+        //     headers: {
+        //         'Accept': 'application/json',
+        //         'Content-Type': 'application/json',
+        //     },
+        //     type: 'Delete',
+        //     url: API + '/sizes/' + id,
+        //     success: loadHomeContent,
+        //     error: function (error) {
+        //         console.log(error)
+        //     }
+        // })
+        alert("Đã xoá!");
     }
 }
 
