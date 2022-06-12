@@ -37,6 +37,7 @@ function loadListStudent() {
         type: "GET",
         url: "http://localhost:8080/api/students",
         success: function (data) {
+            console.log(data)
             let html1 = "";
             for (let i = 0; i < data.length; i++) {
                 html1 += `<tr><th scope="row">${i}</th>
