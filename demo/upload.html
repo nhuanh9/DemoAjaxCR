@@ -1,0 +1,33 @@
+<!DOCTYPE html>
+<head>
+    <title>Upload Files</title>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+    <script type="text/javascript">
+        function submitForm() {
+            let form = document.getElementById("form");
+            let data = new FormData(form);
+            $.ajax({
+                type: "POST",
+                enctype: 'multipart/form-data',
+                url: "http://localhost:8081/upload",
+                data: data,
+                processData: false,
+                contentType: false,
+                cache: false,
+                timeout: 1000000,
+                success: function (data) {
+                    document.getElementById('main').innerHTML = `${data.name}<img src="image/${data.imageUrls}">`
+                }
+            })
+        }
+    </script>
+</head>
+<body>
+<div id="main"></div>
+<form enctype="multipart/form-data" id="form">
+    <input type="text" name="name">
+    <input type="file" name="file"/>
+    <button type="button" onclick="submitForm()">Upload</button>
+</form>
+</body>
+</html>

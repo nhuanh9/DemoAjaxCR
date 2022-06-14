@@ -47,7 +47,7 @@
         let to = document.getElementById('to').value;
         $.ajax({
             type: "GET",
-            url: "http://localhost:8080/products/price-between/" + from + "&to=" + to,
+            url: "http://localhost:8080/products/price-between/?from=" + from + "&to=" + to,
             success: function (data) {
                 display(data)
             }, error: function (error) {
