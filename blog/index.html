@@ -1,0 +1,117 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.6.1/dist/css/bootstrap.min.css"
+          integrity="sha384-zCbKRCUGaJDkqS1kPbPd7TveP5iyJE0EjAuZQTgFLD2ylzuqKfdKlfG/eSrtxUkn" crossorigin="anonymous">
+    <script src="https://cdn.jsdelivr.net/npm/jquery@3.5.1/dist/jquery.slim.min.js"
+            integrity="sha384-DfXdz2htPH0lsSSs5nCTpuj/zy4C+OGpamoFVy38MVBnE+IbbVYUew+OrCXaRkfj"
+            crossorigin="anonymous"></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@4.6.1/dist/js/bootstrap.bundle.min.js"
+            integrity="sha384-fQybjgWLrvvRgtW6bFlB7jaZrFsaBXjsOMm/tB9LTS58ONXgqbR9W8oWht/amnpF"
+            crossorigin="anonymous"></script>
+    <script src="//ajax.googleapis.com/ajax/libs/jquery/1.9.1/jquery.min.js"></script>
+
+</head>
+<body>
+<h1>Danh sách sản phẩm </h1>
+<button onclick="findAll()">Hiện dữ liệu</button>
+<button onclick="findAllByOrderByPrice()">Hiện dữ liệu sắp xếp theo giá</button>
+<button onclick="showAddForm()">Thêm mới</button>
+<hr>
+<input type="text" id="from">
+<input type="text" id="to">
+<button onclick="findByPriceBetween()">Find</button>
+<div id="display">
+
+</div>
+
+<script>
+    let show = document.getElementById("display");
+
+    function findAll() {
+        $.ajax({
+            type: "GET",
+            url: "http://localhost:8080/products",
+            success: function (data) {
+                display(data)
+            }, error: function (error) {
+                console.log(error);
+            }
+        })
+    }
+
+    function findByPriceBetween() {
+        let from = document.getElementById('from').value;
+        let to = document.getElementById('to').value;
+        $.ajax({
+            type: "GET",
+            url: "http://localhost:8080/products/price-between/?from=" + from + "&to=" + to,
+            success: function (data) {
+                display(data)
+            }, error: function (error) {
+                console.log(error);
+            }
+        })
+    }
+
+    function findAllByOrderByPrice() {
+        $.ajax({
+            type: "GET",
+            url: "http://localhost:8080/products/order-by-price",
+            success: function (data) {
+                display(data)
+            }, error: function (error) {
+                console.log(error);
+            }
+        })
+    }
+
+    function display(data) {
+        let str = ""
+        console.log(data)
+        for (let i = 0; i < data.length; i++) {
+            str += "<h3>" + data[i].name + ", " + data[i].price + "</h3>";
+        }
+        show.innerHTML = str;
+    }
+
+    function showAddForm() {
+        let str = "    <input type=\"text\" id=\"name\">\n" +
+            "    <input type=\"text\" id=\"price\">\n" +
+            "    <input type=\"text\" id=\"category\">\n" +
+            "    <button onclick='save()'>Thêm</button>"
+        show.innerHTML = str;
+    }
+
+    function save() {
+        let name = document.getElementById("name").value;
+        let price = document.getElementById("price").value;
+        let categoryId = document.getElementById("category").value;
+        let pro = {
+            name: name,
+            price: price,
+            category: {
+                id: categoryId
+            }
+        }
+        $.ajax({
+            headers: {
+                'Accept': 'application/json',
+                'Content-Type': 'application/json',
+            },
+            type: 'POST',
+            url: 'http://localhost:8080/products',
+            data: JSON.stringify(pro),
+            success: function () {
+                findAll()
+            },
+            error: function (error) {
+                console.log(error)
+            }
+        })
+    }
+</script>
+</body>
+</html>

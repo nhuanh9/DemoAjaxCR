@@ -1,0 +1,125 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.6.1/dist/css/bootstrap.min.css"
+          integrity="sha384-zCbKRCUGaJDkqS1kPbPd7TveP5iyJE0EjAuZQTgFLD2ylzuqKfdKlfG/eSrtxUkn" crossorigin="anonymous">
+    <script src="//ajax.googleapis.com/ajax/libs/jquery/1.9.1/jquery.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@4.6.1/dist/js/bootstrap.bundle.min.js"
+            integrity="sha384-fQybjgWLrvvRgtW6bFlB7jaZrFsaBXjsOMm/tB9LTS58ONXgqbR9W8oWht/amnpF"
+            crossorigin="anonymous"></script>
+
+</head>
+<body onload="findAllQuestion()">
+<div id="main"></div>
+<button onclick="check()">Check</button>
+<script>
+    let main = document.getElementById('main');
+    let listAnswer = [];
+    let score = 0;
+
+    function findAllQuestion() {
+        $.ajax({
+            type: "GET",
+            url: "http://localhost:8080/quizzes",
+            success: function (quizzs) {
+                let str = "";
+                for (let i = 0; i < quizzs.length; i++) {
+                    str += `<h4>
+                                ${i + 1}. ${quizzs[i].question}
+                            </h4>
+                            <div id="answer${quizzs[i].id}"></div>
+                            <hr>`
+                    findAllAnswerByQuizz(quizzs[i].id, quizzs[i].type)
+                }
+                main.innerHTML = str;
+
+            }
+        })
+    }
+
+    function findAllAnswerByQuizz(id, type) {
+        // localStorage.removeItem('listAnswer');
+        $.ajax({
+            type: "GET",
+            url: "http://localhost:8080/answers/find-all-by-quizz/" + id,
+            success: function (answers) {
+                let str = "";
+                if (type == 1) {
+                    for (let i = 0; i < answers.length; i++) {
+                        str += `<input type="radio" name="answers${id}" value="${answers[i].id}" oninput="selectA(${answers[i].id})"> ${answers[i].content}<br>`;
+                        addToListAnswer(answers[i])
+                    }
+                } else {
+                    for (let i = 0; i < answers.length; i++) {
+                        str += `<input type="checkbox" name="answers${id}" value="${answers[i].id}" oninput="selectA(${answers[i].id})"> ${answers[i].content}<br>`;
+                        addToListAnswer(answers[i])
+                    }
+                }
+                document.getElementById('answer' + id).innerHTML = str;
+            }
+        })
+    }
+
+    function addToListAnswer(answer) {
+        listAnswer.push({
+            idQuestion: answer.quizz.id,
+            idAnswer: answer.id,
+            isTrue: answer.isTrue == '1' ? true : false,
+            isSelected: false
+        })
+        localStorage.setItem('listAnswer', JSON.stringify(listAnswer));
+    }
+
+
+    function selectA(id) {
+        listAnswer = JSON.parse(localStorage.getItem('listAnswer'));
+        for (let i = 0; i < listAnswer.length; i++) {
+            if (listAnswer[i].idAnswer == id) {
+                listAnswer[i].isSelected = !listAnswer[i].isSelected;
+            }
+        }
+        console.log(listAnswer)
+        localStorage.setItem('listAnswer', JSON.stringify(listAnswer));
+    }
+
+    function checkAnswer(id) {
+        listAnswer = JSON.parse(localStorage.getItem('listAnswer'));
+        let listCurrentAnswer = []
+        let countSelected = 0;
+        for (let i = 0; i < listAnswer.length; i++) {
+            if (listAnswer[i].idQuestion == id) {
+                listCurrentAnswer.push(listAnswer[i]);
+            }
+        }
+        console.log(listCurrentAnswer)
+        for (let i = 0; i < listCurrentAnswer.length; i++) {
+            if (listCurrentAnswer[i].isTrue != listCurrentAnswer[i].isSelected) {
+                return;
+            }
+            if (listCurrentAnswer[i].isSelected == false) {
+                countSelected++;
+            }
+        }
+        if (countSelected == listCurrentAnswer.length) return;
+        score++;
+        localStorage.setItem('score', JSON.stringify(score));
+    }
+
+    function check() {
+        score = 0;
+        listAnswer = JSON.parse(localStorage.getItem('listAnswer'));
+        $.ajax({
+            type: "GET",
+            url: "http://localhost:8080/quizzes",
+            success: function (quizzs) {
+                for (let i = 0; i < quizzs.length; i++) {
+                    checkAnswer(quizzs[i].id)
+                }
+            }
+        })
+    }
+</script>
+</body>
+</html>

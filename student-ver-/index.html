@@ -1,0 +1,315 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.6.1/dist/css/bootstrap.min.css"
+          integrity="sha384-zCbKRCUGaJDkqS1kPbPd7TveP5iyJE0EjAuZQTgFLD2ylzuqKfdKlfG/eSrtxUkn" crossorigin="anonymous">
+    <script src="//ajax.googleapis.com/ajax/libs/jquery/1.9.1/jquery.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@4.6.1/dist/js/bootstrap.bundle.min.js"
+            integrity="sha384-fQybjgWLrvvRgtW6bFlB7jaZrFsaBXjsOMm/tB9LTS58ONXgqbR9W8oWht/amnpF"
+            crossorigin="anonymous"></script>
+
+</head>
+<body onload="load()">
+<div class="container">
+    <div class="row">
+        <div class="col-12">
+            <nav class="navbar navbar-expand-lg navbar-light bg-light">
+                <a class="navbar-brand" href="#">Navbar</a>
+                <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+                    <span class="navbar-toggler-icon"></span>
+                </button>
+
+                <div class="collapse navbar-collapse" id="navbarSupportedContent">
+                    <ul class="navbar-nav mr-auto">
+                        <li class="nav-item active">
+                            <a class="nav-link" href="#">Home <span class="sr-only">(current)</span></a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link" href="#" onclick="showAddForm()">Add</a>
+                        </li>
+                        <li class="nav-item dropdown">
+                            <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-toggle="dropdown" aria-expanded="false">
+                                Dropdown
+                            </a>
+                            <div class="dropdown-menu" aria-labelledby="navbarDropdown">
+                                <a class="dropdown-item" href="#">Action</a>
+                                <a class="dropdown-item" href="#">Another action</a>
+                                <div class="dropdown-divider"></div>
+                                <a class="dropdown-item" href="#">Something else here</a>
+                            </div>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link disabled">Disabled</a>
+                        </li>
+                    </ul>
+                    <div class="form-inline my-2 my-lg-0">
+                        <input class="form-control mr-sm-2" type="search" placeholder="Search" aria-label="Search" id="search-name">
+                        <button class="btn btn-outline-success my-2 my-sm-0" type="submit" onclick="searchByName(0)">Search</button>
+                    </div>
+                </div>
+            </nav>
+        </div>
+    </div>
+    <div class="row mt-3">
+        <div class="col-3" id="classes"></div>
+        <div class="col-9" id="main">
+                <table class="table">
+                    <thead>
+                    <h1 style="text-align: center">List Student</h1>
+                    <tr>
+                        <th scope="col">#</th>
+                        <th scope="col">Name</th>
+                        <th scope="col">Score</th>
+                        <th scope="col">Age</th>
+                        <th scope="col">Clazz</th>
+                        <th scope="col">Action</th>
+                    </tr>
+                    </thead>
+                    <tbody id="display">
+
+                    </tbody>
+                    <div id="paging">
+
+                    </div>
+                </table>
+        </div>
+    </div>
+</div>
+<!-- Modal -->
+<div class="modal fade" id="modal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title">Add Student</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                <label>Name: </label>
+                <input type="text" id="name" class="form-control">
+                <p>Age: </p>
+                <input type="number" id="age"  class="form-control">
+                <p>Score: </p>
+                <input type="number" id="score"  class="form-control">
+                <p>Class: </p>
+                <select id="classes_id"  class="form-control">
+
+                </select>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                <button type="button" class="btn btn-primary" onclick="save()">Save changes</button>
+            </div>
+        </div>
+    </div>
+</div>
+<div class="modal fade" id="modalEdit" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="exampleModalLabel">Edit Student</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                <label>Name: </label>
+                <input type="hidden" id="id-edit" class="form-control">
+                <input type="text" id="name-edit" class="form-control">
+                <p>Age: </p>
+                <input type="number" id="age-edit"  class="form-control">
+                <p>Score: </p>
+                <input type="number" id="score-edit"  class="form-control">
+                <p>Class: </p>
+                <select id="classes_id-edit"  class="form-control">
+
+                </select>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                <button type="button" class="btn btn-primary" onclick="update()">Save changes</button>
+            </div>
+        </div>
+    </div>
+</div>
+<script>
+    let main = document.getElementById('main');
+    let display = document.getElementById('display');
+    let classes = document.getElementById('classes');
+    let inpName = document.getElementById('name')
+    let inpAge = document.getElementById('age')
+    let inpScore = document.getElementById('score')
+    let inpClassId = document.getElementById('classes_id');
+    let inpIdEdit = document.getElementById('id-edit')
+    let inpNameEdit = document.getElementById('name-edit')
+    let inpAgeEdit = document.getElementById('age-edit')
+    let inpScoreEdit = document.getElementById('score-edit')
+    let inpClassIdEdit = document.getElementById('classes_id-edit')
+    let searchName = document.getElementById('search-name')
+    function findAllStudent() {
+        $.ajax({
+            type: "GET",
+            url:"http://localhost:8081/api/students",
+            success: function (students) {
+                displayStudentList(students)
+            }
+        })
+    }
+    function displayStudentList(students) {
+        let str = "";
+        for (let i=0; i<students.length; i++) {
+            str += `<tr>
+                                    <th scope="row">${i+1}</th>
+                                    <td>${students[i].name}</td>
+                                    <td>${students[i].score}</td>
+                                    <td>${students[i].age}</td>
+                                    <td>${students[i].clazz.name}</td>
+                                    <td><button onclick="showEditForm(${students[i].id})" class="btn btn-primary">Edit</button></td>
+                                </tr>`
+        }
+        display.innerHTML = str;
+    }
+    function load() {
+        findAllStudent()
+        findAllClass()
+    }
+    function findAllClass() {
+        $.ajax({
+            type: "GET",
+            url:"http://localhost:8081/api/classes",
+            success: function (classList) {
+                let str = "<h3>List Class</h3>";
+                for (let i=0; i<classList.length; i++) {
+                    str+="<h4>"+classList[i].name+"</h4>"
+                }
+                classes.innerHTML = str;
+            }
+        })
+    }
+    function showAddForm() {
+        $("#modal").modal("show");
+        $.ajax({
+            type: "GET",
+            url:"http://localhost:8081/api/classes",
+            success: function (classList) {
+                let str = "<h3>List Class</h3>";
+                for (let i=0; i<classList.length; i++) {
+                    str+=`<option value="${classList[i].id}">${classList[i].name}</option>`
+                }
+                document.getElementById('classes_id').innerHTML = str;
+            }
+        })
+    }
+    function save() {
+        let name = inpName.value;
+        let age = inpAge.value;
+        let score = inpScore.value;
+        let classId = inpClassId.value;
+        let student = {
+            name: name,
+            age: age,
+            score: score,
+            clazz: {
+                id: classId
+            }
+        }
+
+        $.ajax({
+            headers: {
+                'Accept': 'application/json',
+                'Content-Type': 'application/json',
+            },
+            type: 'POST',
+            url: 'http://localhost:8081/api/students/',
+            data: JSON.stringify(student),
+            success: function () {
+                findAllStudent();
+                $("#modal").modal("hide");
+                inpName.value = ""
+                inpAge.value = ""
+                inpScore.value = ""
+            },
+            error: function (error) {
+                console.log(error)
+            }
+        })
+    }
+    function showEditForm(id){
+        $("#modalEdit").modal("show");
+        $.ajax({
+            type: 'GET',
+            url: 'http://localhost:8081/api/students/' + id,
+            success: function (student) {
+                inpIdEdit.value = student.id;
+                inpScoreEdit.value = student.score;
+                inpAgeEdit.value = student.age;
+                inpNameEdit.value = student.name;
+                $.ajax({
+                    type: "GET",
+                    url:"http://localhost:8081/api/classes",
+                    success: function (classList) {
+                        let str = "<h3>List Class</h3>";
+                        for (let i=0; i<classList.length; i++) {
+                            str+=`<option value="${classList[i].id}">${classList[i].name}</option>`
+                        }
+                        document.getElementById('classes_id-edit').innerHTML = str;
+                    }
+                })
+            },
+            error: function (error) {
+                console.log(error)
+            }
+        })
+    }
+    function update() {
+        let id = inpIdEdit.value;
+        let name = inpNameEdit.value;
+        let age = inpAgeEdit.value;
+        let score = inpScoreEdit.value;
+        let classId = inpClassIdEdit.value;
+        let student = {
+            name: name,
+            age: age,
+            score: score,
+            clazz: {
+                id: classId
+            }
+        }
+
+        $.ajax({
+            headers: {
+                'Accept': 'application/json',
+                'Content-Type': 'application/json',
+            },
+            type: 'PUT',
+            url: 'http://localhost:8081/api/students/'+id,
+            data: JSON.stringify(student),
+            success: function () {
+                findAllStudent();
+                $("#modalEdit").modal("hide");
+                inpNameEdit.value = ""
+                inpAgeEdit.value = ""
+                inpScoreEdit.value = ""
+            },
+            error: function (error) {
+                console.log(error)
+            }
+        })
+    }
+    function searchByName(number) {
+        let name = document.getElementById('search-name').value;
+        $.ajax({
+            type: "GET",
+            url:"http://localhost:8081/api/students/search-by-name?name="+name+"&page="+number,
+            success: function (students) {
+                displayStudentList(students.content)
+                document.getElementById("paging").innerHTML = `Current Page: ${students.pageable.pageNumber+1}/${students.totalPages} <a onclick="searchByName(${students.pageable.pageNumber+1})">Next</a>   `
+            }
+        })
+    }
+</script>
+</body>
+</html>

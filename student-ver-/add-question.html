@@ -1,0 +1,77 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.6.1/dist/css/bootstrap.min.css"
+          integrity="sha384-zCbKRCUGaJDkqS1kPbPd7TveP5iyJE0EjAuZQTgFLD2ylzuqKfdKlfG/eSrtxUkn" crossorigin="anonymous">
+    <script src="//ajax.googleapis.com/ajax/libs/jquery/1.9.1/jquery.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@4.6.1/dist/js/bootstrap.bundle.min.js"
+            integrity="sha384-fQybjgWLrvvRgtW6bFlB7jaZrFsaBXjsOMm/tB9LTS58ONXgqbR9W8oWht/amnpF"
+            crossorigin="anonymous"></script>
+</head>
+<body>
+<input type="text" id="question">
+<br>
+<select id="type">
+    <option value="1">1 Đáp án</option>
+    <option value="2">Nhiều đáp án</option>
+</select>
+<br>
+<button onclick="save()">Add question</button>
+
+<hr>
+<div id="answers">
+
+</div>
+<script>
+    let inpQuestion = document.getElementById('question');
+    let inpType = document.getElementById('type');
+
+    function save() {
+        let question = inpQuestion.value;
+        let type = inpType.value;
+        let quizz = {
+            question: question,
+            type: type
+        }
+        $.ajax({
+            headers: {
+                'Accept': 'application/json',
+                'Content-Type': 'application/json',
+            },
+            type: 'Post',
+            url: 'http://localhost:8080/quizzes',
+            data: JSON.stringify(quizz),
+            success: function (data) {
+                display(data);
+            },
+            error: function (error) {
+                console.log(error)
+            }
+        })
+    }
+
+    function display(quizz) {
+        let str = quizz.question + "<br>";
+        str += "<input type='text' id='content'>";
+        if (quizz.type == 1) {
+            str += "<input type='radio' id='isTrue'>"
+        } else {
+            str += "<input type='checkbox' id='isTrue'>  "
+        }
+        str += "<button onclick='addAnswer()'>Add Answer</button>";
+        document.getElementById('answers').innerHTML = str;
+    }
+
+    function addAnswer() {
+        let content = document.getElementById('content').value;
+        let isTrue = document.getElementById('isTue').value;
+        let answer = {
+            content: content,
+            isTrue: isTrue
+        }
+    }
+</script>
+</body>
+</html>
