@@ -23,17 +23,29 @@
 <input type="text" id="from">
 <input type="text" id="to">
 <button onclick="findByPriceBetween()">Find</button>
+<hr>
+<div>
+    <input type="text" id="username">
+    <input type="text" id="password">
+    <button onclick="login()">Login</button>
+    <button onclick="logout()">Logout</button>
+</div>
 <div id="display">
 
 </div>
 
 <script>
     let show = document.getElementById("display");
+    const API = "http://localhost:8000"
+    const API_PRODUCT = API + "/products"
 
     function findAll() {
         $.ajax({
             type: "GET",
-            url: "http://localhost:8080/products",
+            headers:{
+                Authorization: 'Bearer ' + localStorage.getItem('token')
+            },
+            url: API_PRODUCT,
             success: function (data) {
                 display(data)
             }, error: function (error) {
@@ -47,7 +59,7 @@
         let to = document.getElementById('to').value;
         $.ajax({
             type: "GET",
-            url: "http://localhost:8080/products/price-between/?from=" + from + "&to=" + to,
+            url: API_PRODUCT + "/price-between/?from=" + from + "&to=" + to,
             success: function (data) {
                 display(data)
             }, error: function (error) {
@@ -59,7 +71,10 @@
     function findAllByOrderByPrice() {
         $.ajax({
             type: "GET",
-            url: "http://localhost:8080/products/order-by-price",
+            url: API_PRODUCT + "/order-by-price",
+            headers:{
+                Authorization: 'Bearer ' + localStorage.getItem('token')
+            },
             success: function (data) {
                 display(data)
             }, error: function (error) {
@@ -102,7 +117,7 @@
                 'Content-Type': 'application/json',
             },
             type: 'POST',
-            url: 'http://localhost:8080/products',
+            url: API_PRODUCT,
             data: JSON.stringify(pro),
             success: function () {
                 findAll()
@@ -111,6 +126,34 @@
                 console.log(error)
             }
         })
+    }
+
+    function login() {
+        let usn = document.getElementById("username").value;
+        let pass = document.getElementById("password").value;
+        let user = {
+            username: usn,
+            password: pass,
+        }
+        $.ajax({
+            headers: {
+                'Accept': 'application/json',
+                'Content-Type': 'application/json',
+            },
+            type: 'POST',
+            url: API + "/login",
+            data: JSON.stringify(user),
+            success: function (data) {
+               localStorage.setItem('token', data.accessToken);
+            },
+            error: function (error) {
+                console.log(error)
+            }
+        })
+    }
+
+    function logout() {
+        localStorage.removeItem('token');
     }
 </script>
 </body>
